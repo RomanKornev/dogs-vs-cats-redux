@@ -5,6 +5,7 @@
 data/dogscats/train
 data/dogscats/valid
 data/dogscats/test
+data/dogscats/results
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
