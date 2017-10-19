@@ -6,6 +6,7 @@ from glob import glob
 import numpy as np
 from scipy import misc, ndimage
 from scipy.ndimage.interpolation import zoom
+from datetime import datetime
 
 from keras import backend as K
 from keras.layers.normalization import BatchNormalization
@@ -16,6 +17,7 @@ from keras.layers.convolutional import Conv2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.pooling import GlobalAveragePooling2D
 from keras.optimizers import SGD, RMSprop, Adam
 from keras.preprocessing import image
+from keras.callbacks import TensorBoard
 
 # In case we are going to use the TensorFlow backend we need to explicitly set the Theano image ordering
 from keras import backend as K
@@ -48,6 +50,18 @@ class Vgg16():
         self.FILE_PATH = 'http://files.fast.ai/models/'
         self.create()
         self.get_classes()
+        now = datetime.now()
+        log_dir = 'logs/' + now.strftime('%Y%m%d-%H%M%S') + '/'
+        self.tb_cb = TensorBoard(log_dir=log_dir, 
+                                 histogram_freq=0, 
+                                 batch_size=32, 
+                                 write_graph=True, 
+                                 write_grads=False, 
+                                 write_images=False,
+                                 write_batch_performance=True,
+                                 embeddings_freq=0, 
+                                 embeddings_layer_names=None, 
+                                 embeddings_metadata=None)
 
 
     def get_classes(self):
@@ -223,9 +237,9 @@ class Vgg16():
             
             Args: 
                 coverage (float): proportion of the dataset to use in a single epoch
-        """
+        """        
         self.model.fit_generator(batches, steps_per_epoch=batches.samples/batches.batch_size*coverage, epochs=nb_epoch,
-                validation_data=val_batches, validation_steps=val_batches.samples/batches.batch_size, verbose=1)
+                validation_data=val_batches, validation_steps=val_batches.samples/batches.batch_size*coverage, verbose=1, callbacks=[self.tb_cb])
 
 
     def test(self, path, batch_size=8):
