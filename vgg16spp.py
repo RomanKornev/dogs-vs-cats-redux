@@ -18,11 +18,15 @@ from keras.layers.pooling import GlobalAveragePooling2D
 from keras.optimizers import SGD, RMSprop, Adam
 from keras.preprocessing import image
 from keras.callbacks import TensorBoard
+from keras.engine import InputLayer
 
 # In case we are going to use the TensorFlow backend we need to explicitly set the Theano image ordering
 from keras import backend as K
 # TODO: fully switch to TF
 K.set_image_dim_ordering('th')
+
+from spp import SpatialPyramidPooling
+
 
 vgg_mean = np.array([123.68, 116.779, 103.939], dtype=np.float32).reshape((3,1,1))
 def vgg_preprocess(x):
@@ -116,7 +120,7 @@ class Vgg16():
         model.add(MaxPooling2D((2, 2), strides=(2, 2)))
 
 
-    def FCBlock(self):
+    def FCBlock(self, size=4096):
         """
             Adds a fully connected layer of 4096 neurons to the model with a
             Dropout of 0.5
@@ -125,7 +129,7 @@ class Vgg16():
             Returns:   None
         """
         model = self.model
-        model.add(Dense(4096, activation='relu'))
+        model.add(Dense(size, activation='relu'))
         model.add(Dropout(0.5))
 
 
@@ -137,7 +141,7 @@ class Vgg16():
             Returns:   None
         """
         model = self.model = Sequential()
-        model.add(Lambda(vgg_preprocess, input_shape=(3,224,224), output_shape=(3,224,224)))
+        model.add(Lambda(vgg_preprocess, input_shape=(3, 224, 224), output_shape=(3, 224, 224)))
 
         self.ConvBlock(2, 64)
         self.ConvBlock(2, 128)
@@ -170,7 +174,7 @@ class Vgg16():
 
             See Keras documentation: https://keras.io/preprocessing/image/
         """
-        return gen.flow_from_directory(path, target_size=(224,224),
+        return gen.flow_from_directory(path, target_size=(224, 224),
                 class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
 
 
@@ -190,6 +194,46 @@ class Vgg16():
         for layer in model.layers: layer.trainable=False
         model.add(Dense(num, activation='softmax'))
         self.compile()
+        
+    def ft_spp(self, num):
+        """
+            Replace the 'flatten' layer with a Spatial Pyramid Pooling layer.
+            Replace the last layer of the model with a Dense (fully connected) layer of num neurons.
+            Will also lock the weights of all layers except the new layer so that we only learn
+            weights for the last layer in subsequent training.
+
+            Args:
+                num (int) : Number of neurons in the Dense layer
+            Returns:
+                None
+        """
+        model = self.model
+        print('updating architecture...')
+        # make a new model and transfer old weights
+        old_fc1 = model.layers[-3].get_weights()
+        #old_fc2 = model.layers[-5]
+        assert(old_fc1 != [])
+        #assert(old_fc2 != [])
+        model.pop()
+        model.pop()
+        model.pop()
+        model.pop()
+        model.pop()
+        model.pop()
+        print('updating input layer...')
+        model.layers[0] = Lambda(vgg_preprocess, input_shape=(3, None, None), output_shape=(3, None, None))
+        for layer in model.layers: layer.trainable=False
+            
+        model.add(SpatialPyramidPooling([1,2,4]))
+
+        self.FCBlock(1024)
+        #model.layers[-2].set_weights(old_fc2)
+        self.FCBlock(1024)
+        #print('transfering weights...')
+        #model.layers[-2].set_weights(old_fc1)
+        
+        model.add(Dense(num, activation='softmax'))
+        self.compile()
 
     def finetune(self, batches):
         """
@@ -199,7 +243,7 @@ class Vgg16():
                 batches : A keras.preprocessing.image.ImageDataGenerator object.
                           See definition for get_batches().
         """
-        self.ft(batches.num_class)
+        self.ft_spp(batches.num_class)
         classes = list(iter(batches.class_indices)) # get a list of all the class labels
         
         # batches.class_indices is a dict with the class name as key and an index as value
