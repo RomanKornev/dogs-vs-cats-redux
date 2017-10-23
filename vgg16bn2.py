@@ -17,7 +17,8 @@ from keras.layers.convolutional import Conv2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.pooling import GlobalAveragePooling2D
 from keras.optimizers import SGD, RMSprop, Adam
 from keras.preprocessing import image
-from keras.callbacks import TensorBoard, Callback
+from keras.callbacks import TensorBoard, Callback, ReduceLROnPlateau
+
 
 #from sgdacc import SGDAccum
 import time
@@ -64,7 +65,11 @@ class Vgg16():
                                  embeddings_freq=0, 
                                  embeddings_layer_names=None, 
                                  embeddings_metadata=None)
-        self.slow = Slow_training()
+        self.lrs = ReduceLROnPlateau(monitor='val_loss', 
+                                     factor=0.2,
+                                     patience=5, 
+                                     min_lr=1e-5, 
+                                     verbose=1)
 
 
     def get_classes(self):
@@ -255,8 +260,11 @@ class Vgg16():
             Args: 
                 coverage (float): proportion of the dataset to use in a single epoch
         """        
-        self.model.fit_generator(batches, steps_per_epoch=batches.samples/batches.batch_size*coverage, epochs=nb_epoch,
-                validation_data=val_batches, validation_steps=val_batches.samples/batches.batch_size*coverage, verbose=1, callbacks=[self.tb_cb])
+        #self.model.fit_generator(batches, steps_per_epoch=batches.samples/batches.batch_size*coverage, epochs=nb_epoch,
+        #        validation_data=val_batches, validation_steps=val_batches.samples/batches.batch_size, verbose=1, callbacks=[self.tb_cb])
+        return self.model.fit_generator(batches, steps_per_epoch=batches.samples/batches.batch_size*coverage, epochs=nb_epoch,
+                validation_data=val_batches, verbose=1, 
+                                 callbacks=[self.tb_cb])
 
 
     def test(self, path, batch_size=8):
