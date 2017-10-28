@@ -2,7 +2,7 @@
 .ipynb_checkpoints/
 *.h5
 *.gz
-data/dogscats/train
+data/dogscats/train*
 data/dogscats/valid
 data/dogscats/test
 data/dogscats/results
