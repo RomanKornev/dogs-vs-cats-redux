@@ -54,4 +54,4 @@ if __name__ == '__main__':
 
     preds = model.predict(x)
     print(np.argmax(preds))
-    print('Predicted:', decode_predictions(preds, 1))
+    print('Predicted:', decode_predictions(preds, 1))  # ('n02123394', 'Persian_cat', 0.91428012)
