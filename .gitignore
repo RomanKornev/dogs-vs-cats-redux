@@ -2,20 +2,7 @@
 .ipynb_checkpoints/
 *.h5
 *.gz
-data/dogscats/train*
-data/dogscats/valid
-data/dogscats/test
-data/dogscats/results
-data/dogscats/logs
-data/dogscats/vis
-data/dogscats/sample/
-data/dogs/train*
-data/dogs/valid
-data/dogs/test
-data/dogs/results
-data/dogs/logs
-data/dogs/sample
-data/iceberg/logs
+data/
 logs/
 
 # Byte-compiled / optimized / DLL files
