@@ -7,6 +7,16 @@ data/dogscats/valid
 data/dogscats/test
 data/dogscats/results
 data/dogscats/logs
+data/dogscats/vis
+data/dogscats/sample/train
+data/dogscats/sample/valid
+data/dogs/train*
+data/dogs/valid
+data/dogs/test
+data/dogs/results
+data/dogs/logs
+data/dogs/sample
+data/iceberg/logs
 logs/
 
 # Byte-compiled / optimized / DLL files
