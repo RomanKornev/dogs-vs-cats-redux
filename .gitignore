@@ -1,9 +1,37 @@
-# Jupyter
-.ipynb_checkpoints/
 *.h5
 *.gz
 data/
 logs/
+_theano_.ipynb
+char-rnn.ipynb
+convolution-intro.ipynb
+dogs_cats_redux_spp.ipynb
+dogscats-ensemble.ipynb
+imagenet_batchnorm.ipynb
+init.sh
+lesson1.ipynb
+lesson2.ipynb
+lesson3.ipynb
+lesson4.ipynb
+lesson5.ipynb
+lesson6.ipynb
+lesson7.ipynb
+mnist.ipynb
+resnet50.py
+run.sh
+sample_submission.csv
+sgd-intro.ipynb
+sgdacc.py
+spp.py
+statefarm-sample.ipynb
+statefarm.ipynb
+vgg16bn.py
+vgg16spp.py
+wordvectors.ipynb
+
+
+# Jupyter
+.ipynb_checkpoints/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
