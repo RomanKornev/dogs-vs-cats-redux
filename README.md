@@ -62,3 +62,7 @@ dogs-vs-cats-redux
 ├── dogs_cats_redux_ensemble.ipynb
 └── README.md
 ```
+# Usage
+`> jupyter notebook`
+
+`dogs_cats_redux_ensemble.ipynb` for final model
