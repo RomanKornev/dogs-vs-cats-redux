@@ -1,5 +1,9 @@
 # Dogs vs Cats
-Predict whether a given image is a cat or a dog with 99.7% accuracy. Partially based on [Fast.ai](http://course.fast.ai/) course.
+Predict whether a given image is a cat or a dog with 99.7% accuracy. 
+
+Kaggle: https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition
+
+Partially based on [Fast.ai](http://course.fast.ai/) course.
 
 # Intro
 - [ ] TODO: The goals
@@ -13,14 +17,16 @@ Training is done using bottlenecks on a data augmented [x6] training set (138000
 
 Precomputed bottleneck features are feeded into 2 hidden dense layers [x2048] and 1 output softmax layer.
 
+### Size
 Training set size = 2.5GB. Model size = 1GB per model (saved precomputed weights).
 
+### Speed
 Time to precompute bottlenecks: 2hr per model on a GTX 770.
 
 Time to train: 5sec/epoch with 10000 batch size.
 
 
-## Error rates
+### Error rates
 Ensemble reaches 99.7% accuracy on the validation set (only 6/2000 incorrect).
 
 0.03893 leaderboard score **(15th place from 1,314 teams)**.
