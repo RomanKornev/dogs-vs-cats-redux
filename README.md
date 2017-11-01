@@ -1,5 +1,5 @@
 # Dogs vs Cats
-Predict whether a given image is a cat or a dog with 99.7% accuracy. 
+Predict whether a given image is of a cat or a dog with 99.7% accuracy. 
 
 Kaggle: https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition
 
@@ -40,13 +40,10 @@ Ensemble reaches 99.7% accuracy on the validation set (only 6/2000 incorrect).
 
 # Data
 ## Download the data
-`pip install kaggle-cli`
-
-`kg config -g -u <username> -p <password> -c dogs-vs-cats-redux-kernels-edition`
-
-`kg download`
-
-`7z x *.zip`
+    pip install kaggle-cli
+    kg config -g -u <username> -p <password> -c dogs-vs-cats-redux-kernels-edition
+    kg download
+    7z x *.zip
 
 I split the data into 23000 train and 2000 validation sets.
 ## File structure
@@ -69,6 +66,6 @@ dogs-vs-cats-redux
 └── README.md
 ```
 # Usage
-`> jupyter notebook`
+    jupyter notebook
 
 `dogs_cats_redux_ensemble.ipynb` for final model
