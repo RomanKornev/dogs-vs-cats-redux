@@ -32,7 +32,7 @@ Ensemble reaches 99.7% accuracy on the validation set (only 6/2000 incorrect).
 0.03893 leaderboard score **(15th place from 1,314 teams)**.
 
 # Requirements
-* keras==2.0.8
+* keras==2.0.9
 * tensorflow==1.2.0
 * pandas
 * seaborn
@@ -66,6 +66,10 @@ dogs-vs-cats-redux
 └── README.md
 ```
 # Usage
-    jupyter notebook
-
 `dogs_cats_redux_ensemble.ipynb` for final model
+
+`xception_example.py` - example of Xception prediction
+
+`resnet50_example.py` - example of ResNet50 prediction
+
+`inception_resnet_v2_example.py` - example of Inception-ResNet-V2 prediction
